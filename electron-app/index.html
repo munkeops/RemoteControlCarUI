@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Fetching Remote Data With A Button Click And Error Handling</title>
+    <script src="https://unpkg.com/react@16.12.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
+<style>
+body { background-color: #555; }
+</style>
+
+</head>
+<body>
+    <p>Fetching Remote Data With A Button Click</p>
+    <p><a href="/">Home</a></p>
+    <div id="root"></div>
+    <script type="text/babel">
+        function App() {
+            const [statusMessage, setStatusMessage] = React.useState('TBD')
+            const [isFetching, setIsFetching] = React.useState(false)
+
+            React.useEffect(() => {
+                if (isFetching) {
+                    window.fetch('https://api.weather.gov/')
+                        .then(response => response.json())
+                        .then(
+                            response => {
+                                setStatusMessage(response.status)
+                            },
+                            errorData => {
+                                setStatusMessage('ERROR')
+                            }
+                        )
+                    setIsFetching(false)
+                }
+            })
+
+            return (
+                <div>
+                    <div>API Status: {statusMessage}</div>
+                    <button onClick={() => setFetchStatus('pending')}>Check Status</button>
+                </div>
+            )
+        }
+
+        ReactDOM.render(<App/>, document.getElementById('root'))
+    </script>
+</body>
+</html>
